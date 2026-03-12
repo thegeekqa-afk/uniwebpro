@@ -15,7 +15,7 @@ const StatCard = ({ title, value, icon: Icon, color, trend }: { title: string, v
       )}
     </div>
     <p className="text-slate-500 text-sm font-medium">{title}</p>
-    <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{value.toLocaleString()}</h3>
+    <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{(value ?? 0).toLocaleString()}</h3>
   </div>
 );
 
@@ -29,7 +29,11 @@ export default function Dashboard() {
   useEffect(() => {
     fetch('/api/stats')
       .then(res => res.json())
-      .then(data => setStats(data))
+      .then(data => {
+        if (data && !data.error) {
+          setStats(data);
+        }
+      })
       .catch(err => console.error(err));
   }, []);
 
